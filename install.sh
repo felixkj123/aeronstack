@@ -17,22 +17,24 @@ check_machine() {
 
 aeron_cmd_stat () {
 	echo -e "\e[1;32maeron_cmd_stat\e[0m"
-	echo "aeron_cmd_stat is $1"
-
-	if [ $1 != $SUCCESS  ]; then
-		echo -e "\e[1;32mcmd failure...\e[0m"
-		exit 1
-	else
-		echo "Done\n"
 	
+	#echo "aeron_cmd_stat is $1"
+	if [ $machine = 'Ubuntu'  ]; then
+		if [ $1 != $SUCCESS  ]; then
+			echo -e "\e[1;32mcmd failure...\e[0m"
+			exit 1
+		else
+			echo "Done\n"
+		
+		fi
 	fi
 }
 
-check_ret=$(check_machine )
+machine=$(check_machine )
 
-echo "the machine is <<$check_ret>>"
+echo "the machine is <<$machine>>"
 
-case $check_ret in
+case $machine in
 	"Ubuntu")
 		PKG_TOOL="apt-get"
 		;;
