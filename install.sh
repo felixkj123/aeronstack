@@ -1,6 +1,7 @@
 #!/bin/bash
 
 . local.conf
+. modules.sh
 
 TOP_DIR=$(cd $(dirname "$0") && pwd)
 
@@ -9,47 +10,42 @@ PKG_TOOL=""
 SUCCESS=0
 ERROR=1
 
-check_machine() {
-	retval=""
-	machine=$(awk -F= '/^NAME/{print $2}' /etc/os-release | sed "s/\"//g")
-	echo "$machine"
-}
-
-aeron_cmd_stat () {
-	echo -e "\e[1;32maeron_cmd_stat\e[0m"
-	
-	#echo "aeron_cmd_stat is $1"
-	if [ $machine = 'Ubuntu'  ]; then
-		if [ $1 != $SUCCESS  ]; then
-			echo -e "\e[1;32mcmd failure...\e[0m"
-			exit 1
-		else
-			echo "Done\n"
-		
-		fi
-	fi
-}
-
 machine=$(check_machine )
 
 echo "the machine is <<$machine>>"
 
-case $machine in
-	"Ubuntu")
-		PKG_TOOL="apt-get"
-		;;
-	"CentOS Linux")
-		PKG_TOOL="yum"
-		;;
-	*)
-		PKG_TOOL="error"
-esac
+find_package_fn () {
+	case $machine in
+		"Ubuntu")
+			PKG_TOOL="apt"
+			;;
+		"CentOS Linux")
+			PKG_TOOL="yum"
+			;;
+		*)
+			PKG_TOOL="error"
+	esac
+}
 
-if [ $NODE = 'controller'  ]; then
-	echo $PKG_TOOL
-	$PKG_TOOL update
-	aeron_install_retval="$?"
-	aeron_cmd_stat $aeron_install_retval	
+install_fn () {
+	if [ $NODE = 'controller'  ]; then
+		#echo $PKG_TOOL
+		$PKG_TOOL update
+		aeron_install_retval="$?"
+		aeron_cmd_stat $aeron_install_retval $machine
+	
+		$PKG_TOOL install chrony -y
+	        aeron_install_retval="$?"
+	        aeron_cmd_stat $aeron_install_retval $machine
+	
+	
+	fi
+}
 
 
-fi
+main () {
+	find_package_fn
+	install_fn
+	return 0	
+}
+main $@
