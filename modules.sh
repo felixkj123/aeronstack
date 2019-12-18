@@ -1,6 +1,7 @@
 #!/bin/bash
 
-
+SUCCESS=0
+ERROR=1
 
 check_machine() {
         retval=""

@@ -4,25 +4,25 @@
 . modules.sh
 
 TOP_DIR=$(cd $(dirname "$0") && pwd)
-
+BASH_DIR=$(which bash)
 
 main () {
 	echo -e "\e[1;32mAeronstack Installation Started\e[0m"
 	machine=$(check_machine )
 	if [ $1 = "all"  ];then
-		.$TOP_DIR/install.sh
+		$BASH_DIR $TOP_DIR/install.sh
 		aeron_install_retval="$?"
         	aeron_cmd_stat $aeron_install_retval $machine
 		
-		.$TOP_DIR/movfiles.sh
+		$BASH_DIR $TOP_DIR/movfiles.sh
 		aeron_install_retval="$?"
         	aeron_cmd_stat $aeron_install_retval $machine	
 
-		.$TOP_DIR/services.sh
+		$BASH_DIR $TOP_DIR/replacefiles.sh
 		aeron_install_retval="$?"
         	aeron_cmd_stat $aeron_install_retval $machine
 
-		.$TOP_DIR/services
+		$BASH_DIR $TOP_DIR/services.sh start_all
 		aeron_install_retval="$?"
         	aeron_cmd_stat $aeron_install_retval $machine
 	fi

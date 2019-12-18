@@ -20,13 +20,16 @@ services_stop_fn () {
 	echo "empty" 
 }
 main () {
-	if [ $1= "start_all"  ];then
+	echo "service machine is $machine"
+	echo "service arg is $1"
+	if [ $1 = 'start_all'  ];then
+		#echo "service machine is $machine"
 		services_enable_fn
 		aeron_service_retval="$?"
                 aeron_cmd_stat $aeron_service_retval $machine
 
 		services_restart_fn
-		aeron_install_retval="$?"
+		aeron_service_retval="$?"
                 aeron_cmd_stat $aeron_service_retval $machine
 	fi
 	return 0

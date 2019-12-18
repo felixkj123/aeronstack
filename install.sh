@@ -30,9 +30,9 @@ find_package_fn () {
 install_fn () {
 	if [ $NODE = 'controller'  ]; then
 		#echo $PKG_TOOL
-		$PKG_TOOL update
-		aeron_install_retval="$?"
-		aeron_cmd_stat $aeron_install_retval $machine
+		#$PKG_TOOL update
+		#aeron_install_retval="$?"
+		#aeron_cmd_stat $aeron_install_retval $machine
 	
 		$PKG_TOOL install chrony -y
 	        aeron_install_retval="$?"
