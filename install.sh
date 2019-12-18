@@ -12,11 +12,7 @@ ERROR=1
 check_machine() {
 	retval=""
 	machine=$(awk -F= '/^NAME/{print $2}' /etc/os-release | sed "s/\"//g")
-	if [ $machine = "Ubuntu" ]; then
-		#echo "machine is $machine"
-		retval=$machine
-	fi
-	echo $retval
+	echo "$machine"
 }
 
 aeron_cmd_stat () {
@@ -32,10 +28,9 @@ aeron_cmd_stat () {
 	fi
 }
 
-check_machine $mac
 check_ret=$(check_machine )
 
-#echo "f machine is <<$check_ret>>"
+echo "the machine is <<$check_ret>>"
 
 case $check_ret in
 	"Ubuntu")
@@ -49,6 +44,7 @@ case $check_ret in
 esac
 
 if [ $NODE = 'controller'  ]; then
+	echo $PKG_TOOL
 	$PKG_TOOL update
 	aeron_install_retval="$?"
 	aeron_cmd_stat $aeron_install_retval	
