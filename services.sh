@@ -10,10 +10,41 @@ machine=$(check_machine )
 
 services_enable_fn() {
 	systemctl enable chrony
+	aeron_service_enable_retval="$?"
+        aeron_cmd_stat $aeron_service_enable_retval $machine
+
+	systemctl enable mysql
+	aeron_service_enable_retval="$?"
+        aeron_cmd_stat $aeron_service_enable_retval $machine
+
+	systemctl enable memcached
+        aeron_service_enable_retval="$?"
+        aeron_cmd_stat $aeron_service_enable_retval $machine
+
+	systemctl enable etcd
+        aeron_service_enable_retval="$?"
+        aeron_cmd_stat $aeron_service_enable_retval $machine
+
 }
 
 services_restart_fn () {
 	systemctl restart chrony
+	aeron_service_restart_retval="$?"
+        aeron_cmd_stat $aeron_service_restart_retval $machine
+
+	
+	systemctl restart mysql
+	aeron_service_restart_retval="$?"
+        aeron_cmd_stat $aeron_service_restart_retval $machine
+
+	systemctl restart memcached
+        aeron_service_restart_retval="$?"
+        aeron_cmd_stat $aeron_service_restart_retval $machine
+
+	systemctl restart etcd
+        aeron_service_restart_retval="$?"
+        aeron_cmd_stat $aeron_service_restart_retval $machine
+
 }
 
 services_stop_fn () {
