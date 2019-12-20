@@ -2,6 +2,7 @@
 
 . local.conf
 . modules.sh
+. arstackrc
 
 TOP_DIR=$(cd $(dirname "$0") && pwd)
 ETC_ROOT_DIR="/etc"

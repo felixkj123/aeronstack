@@ -1,0 +1,9 @@
+
+
+CONT_DEFAULT_SERVICES="chrony mariadb-server python-pymysql rabbitmq-server \
+			memcached python-memcache etcd all"
+
+AVAILABLE_SERVICES="chrony mariadb-server python-pymysql rabbitmq-server\
+			memcached python-memcache etcd all"
+
+AVAILABLE_COMMANDS="all clean"

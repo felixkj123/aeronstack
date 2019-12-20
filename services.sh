@@ -2,6 +2,7 @@
 
 . local.conf
 . modules.sh
+. arstackrc
 
 TOP_DIR=$(cd $(dirname "$0") && pwd)
 
@@ -13,7 +14,7 @@ services_enable_fn() {
 	aeron_service_enable_retval="$?"
         aeron_cmd_stat $aeron_service_enable_retval $machine
 
-	systemctl enable mysql
+	systemctl enable mariadb
 	aeron_service_enable_retval="$?"
         aeron_cmd_stat $aeron_service_enable_retval $machine
 
@@ -33,7 +34,7 @@ services_restart_fn () {
         aeron_cmd_stat $aeron_service_restart_retval $machine
 
 	
-	systemctl restart mysql
+	systemctl restart mariadb
 	aeron_service_restart_retval="$?"
         aeron_cmd_stat $aeron_service_restart_retval $machine
 
