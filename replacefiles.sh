@@ -48,6 +48,39 @@ replace_fn () {
 		sed -i "/^#MDCGLANCEKEYSTONEAUTH/{n;d}" $ETC_ROOT_DIR/glance/glance-registry.conf
                 sed -i "/MDCGLANCEKEYSTONEAUTH/ a\password = $SERVICE_PASSWORD" $ETC_ROOT_DIR/glance/glance-registry.conf
 
+		###placement
+		sed -i "/^#MDCDATABASECONNECTION/{n;d}" $ETC_ROOT_DIR/placement/placement.conf
+                sed -i "/MDCDATABASECONNECTION/ a\connection = mysql+pymysql://placement:$SERVICE_PASSWORD@controller/placement" $ETC_ROOT_DIR/placement/placement.conf
+
+		sed -i "/^#MDCPLACEMENTKEYSTONEAUTH/{n;d}" $ETC_ROOT_DIR/placement/placement.conf
+                sed -i "/MDCPLACEMENTKEYSTONEAUTH/ a\password = $SERVICE_PASSWORD" $ETC_ROOT_DIR/placement/placement.conf
+
+		###nova
+		sed -i "/^#MDCAPIDATABASE/{n;d}" $ETC_ROOT_DIR/nova/nova.conf
+		sed -i "/MDCAPIDATABASE/ a\connection = mysql+pymysql://nova:$SERVICE_PASSWORD@controller/nova_api" $ETC_ROOT_DIR/nova/nova.conf
+
+		sed -i "/^#MDCDATABASECONNECTION/{n;d}" $ETC_ROOT_DIR/nova/nova.conf
+                sed -i "/MDCDATABASECONNECTION/ a\connection = mysql+pymysql://nova:$SERVICE_PASSWORD@controller/nova" $ETC_ROOT_DIR/nova/nova.conf
+
+		sed -i "/^#MDCNOVATRANSPORT/{n;d}" $ETC_ROOT_DIR/nova/nova.conf
+                sed -i "/MDCNOVATRANSPORT/ a\transport_url = rabbit://openstack:$SERVICE_PASSWORD@controller:5672/" $ETC_ROOT_DIR/nova/nova.conf
+
+		sed -i "/^#MDCNOVAKEYSTONEAUTH/{n;d}" $ETC_ROOT_DIR/nova/nova.conf
+                sed -i "/MDCNOVAKEYSTONEAUTH/ a\password = $SERVICE_PASSWORD" $ETC_ROOT_DIR/nova/nova.conf
+
+		sed -i "/^#MDCMANAGEMENT_IP/{n;d}" $ETC_ROOT_DIR/nova/nova.conf
+                sed -i "/MDCMANAGEMENT_IP/ a\my_ip = $MANAGEMENT_IP" $ETC_ROOT_DIR/nova/nova.conf
+
+		sed -i "/^#MDCPLACEMENTAUTH/{n;d}" $ETC_ROOT_DIR/nova/nova.conf
+                sed -i "/MDCPLACEMENTAUTH/ a\password = $SERVICE_PASSWORD" $ETC_ROOT_DIR/nova/nova.conf
+
+		sed -i "/^#MDCNEUTRONAUTH/{n;d}" $ETC_ROOT_DIR/nova/nova.conf
+                sed -i "/MDCNEUTRONAUTH/ a\password = $SERVICE_PASSWORD" $ETC_ROOT_DIR/nova/nova.conf
+
+		sed -i "/^#MDCMETADATAPROXY/{n;d}" $ETC_ROOT_DIR/nova/nova.conf
+                sed -i "/MDCMETADATAPROXY/ a\metadata_proxy_shared_secret = $SERVICE_PASSWORD" $ETC_ROOT_DIR/nova/nova.conf
+
+
 
 	elif [ $NODE = "compute" ]; then
 		sed -i "/^#MDC_NTP_SERVERIP/{n;d}" $ETC_ROOT_DIR/chrony/chrony.conf

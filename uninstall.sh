@@ -10,7 +10,8 @@ machine=$(check_machine )
 
 uninstall_fn () {
 	echo "inside uninstall function"
-	apt-get purge mariadb-server chrony etcd rabbitmq-server memcached keystone mariadb-common mysql-common glance -y
+	apt-get purge mariadb-server chrony etcd rabbitmq-server memcached keystone mariadb-common mysql-common glance placement-api \
+		nova-api nova-conductor nova-novncproxy nova-scheduler -y
 	return 0
 
 }

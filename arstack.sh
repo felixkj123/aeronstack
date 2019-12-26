@@ -76,7 +76,7 @@ main () {
 		aeron_install_retval="$?"
                 aeron_cmd_stat $aeron_install_retval $machine arstack_main_checkrepo
 		
-		$BASH_DIR $TOP_DIR/install.sh
+		$BASH_DIR $TOP_DIR/install.sh $@
 		aeron_install_retval="$?"
         	aeron_cmd_stat $aeron_install_retval $machine arstack_main_install
 		
