@@ -37,34 +37,42 @@ install_fn () {
 	
 		$PKG_TOOL install chrony -y
 	        aeron_install_retval="$?"
-	        aeron_cmd_stat $aeron_install_retval $machine
+	        aeron_cmd_stat $aeron_install_retval $machine install_fn
 		
 		$PKG_TOOL install mariadb-server python-pymysql -y
                 aeron_install_retval="$?"
-                aeron_cmd_stat $aeron_install_retval $machine
+                aeron_cmd_stat $aeron_install_retval $machine install_fn
 	
 		$PKG_TOOL install rabbitmq-server -y
                 aeron_install_retval="$?"
-                aeron_cmd_stat $aeron_install_retval $machine
+                aeron_cmd_stat $aeron_install_retval $machine install_fn
 
 		###initializing rabbitmq server
 	        rabbitmqctl add_user openstack $RABBIT_PASSWORD
 	        aeron_install_retval="$?"
-	        aeron_cmd_stat $aeron_install_retval $machine
+	        aeron_cmd_stat $aeron_install_retval $machine install_fn
 	
 	
 	        rabbitmqctl set_permissions openstack ".*" ".*" ".*"
 	        aeron_install_retval="$?"
-	        aeron_cmd_stat $aeron_install_retval $machine
+	        aeron_cmd_stat $aeron_install_retval $machine install_fn
 
 		$PKG_TOOL install memcached python-memcache -y
                 aeron_install_retval="$?"
-                aeron_cmd_stat $aeron_install_retval $machine
+                aeron_cmd_stat $aeron_install_retval $machine install_fn
 	
 		$PKG_TOOL install etcd -y
                 aeron_install_retval="$?"
-                aeron_cmd_stat $aeron_install_retval $machine
+                aeron_cmd_stat $aeron_install_retval $machine install_fn
+
+		$PKG_TOOL install keystone -y
+                aeron_install_retval="$?"
+                aeron_cmd_stat $aeron_install_retval $machine install_fn
 	
+		$PKG_TOOL install glance -y
+                aeron_install_retval="$?"
+                aeron_cmd_stat $aeron_install_retval $machine install_fn
+
 
 	fi
 }

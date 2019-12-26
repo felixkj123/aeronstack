@@ -14,7 +14,7 @@ check_machine() {
 
 aeron_cmd_stat () {
 
-        echo -e "\e[1;32maeron_cmd_stat\e[0m"
+        echo -e "\e[1;32maeron_cmd_stat $3\e[0m"
         if [ $2 = 'Ubuntu'  ]; then
                 if [ $1 != $SUCCESS  ]; then
                         echo -e "\e[1;32mcmd failure...\e[0m"

@@ -44,36 +44,26 @@ checkrepo_fn () {
 	if [ $aeron_checkrepo_retval != $SUCCESS ]; then
 		apt-get install -y software-properties-common ubuntu-cloud-keyring
 		aeron_checkrepo_retval="$?"
-		aeron_cmd_stat $aeron_checkrepo_retval $machine
+		aeron_cmd_stat $aeron_checkrepo_retval $machine arstack_checkrepo
 		
 		add-apt-repository cloud-archive:train -y
                 aeron_checkrepo_retval="$?"
-                aeron_cmd_stat $aeron_checkrepo_retval $machine
+                aeron_cmd_stat $aeron_checkrepo_retval $machine arstack_checkrepo
 	fi
 	
 	apt update && apt dist-upgrade
 	aeron_checkrepo_retval="$?"
-        aeron_cmd_stat $aeron_checkrepo_retval $machine
+        aeron_cmd_stat $aeron_checkrepo_retval $machine arstack_checkrepo
 
 	apt install python3-openstackclient -y
 	aeron_checkrepo_retval="$?"
-        aeron_cmd_stat $aeron_checkrepo_retval $machine
+        aeron_cmd_stat $aeron_checkrepo_retval $machine arstack_checkrepo
 	
 	return 0
 }
 
 main () {
 	echo -e "\e[1;32mAeronstack Installation Started\e[0m"
-	#machine=$(check_machine )
-
-#	check_command_auth_fn $1
-#	aeron_install_retval="$?"
-#        aeron_cmd_stat $aeron_install_retval $machine
-#
-#	check_service_auth_fn $@
-#	aeron_install_retval="$?"
-#       	aeron_cmd_stat $aeron_install_retval $machine
-
 	echo -e "\e[1;32mBefore check_args_fn\e[0m"
 	check_args_fn $@
 	aeron_install_retval="$?"
@@ -84,24 +74,42 @@ main () {
 		
 		checkrepo_fn
 		aeron_install_retval="$?"
-                aeron_cmd_stat $aeron_install_retval $machine
+                aeron_cmd_stat $aeron_install_retval $machine arstack_main_checkrepo
 		
 		$BASH_DIR $TOP_DIR/install.sh
 		aeron_install_retval="$?"
-        	aeron_cmd_stat $aeron_install_retval $machine
+        	aeron_cmd_stat $aeron_install_retval $machine arstack_main_install
 		
 		$BASH_DIR $TOP_DIR/movfiles.sh
 		aeron_install_retval="$?"
-        	aeron_cmd_stat $aeron_install_retval $machine	
+        	aeron_cmd_stat $aeron_install_retval $machine arstack_main_movfiles
 
 		$BASH_DIR $TOP_DIR/replacefiles.sh
 		aeron_install_retval="$?"
-        	aeron_cmd_stat $aeron_install_retval $machine
+        	aeron_cmd_stat $aeron_install_retval $machine arstack_main_replace
 
+
+		$BASH_DIR $TOP_DIR/dbinit.sh
+		aeron_install_retval="$?"
+		aeron_cmd_stat $aeron_install_retval $machine arstack_main_dbinit
+
+		
+		###have to create a openstackinit.sh script
+		
+		
+		$BASH_DIR $TOP_DIR/dbpopulate.sh
+                aeron_install_retval="$?"
+                aeron_cmd_stat $aeron_install_retval $machine arstack_main_dbpopulate
+		
 		$BASH_DIR $TOP_DIR/services.sh start_all
 		aeron_install_retval="$?"
-        	aeron_cmd_stat $aeron_install_retval $machine
-	
+        	aeron_cmd_stat $aeron_install_retval $machine arstack_main_services
+
+		$BASH_DIR $TOP_DIR/arstack_init.sh
+		aeron_install_retval="$?"
+                aeron_cmd_stat $aeron_install_retval $machine arstack_main_arstack_init
+
+
 	elif [ $1 = "clean"  ]; then
 		$BASH_DIR $TOP_DIR/uninstall.sh $@
 	fi

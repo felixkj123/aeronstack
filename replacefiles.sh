@@ -31,6 +31,12 @@ replace_fn () {
 		sed -i "/ETCD_ADVERTISE_CLIENT_URLS/ c\ETCD_ADVERTISE_CLIENT_URLS="http://$HOST_IP:2379"" $ETC_ROOT_DIR/default/etcd
 		sed -i "/ETCD_LISTEN_CLIENT_URLS/ c\ETCD_LISTEN_CLIENT_URLS="http://$HOST_IP:2379"" $ETC_ROOT_DIR/default/etcd
 
+		###keystone
+		sed -i "/^#MDCDATABASECONNECTION/{n;d}" $ETC_ROOT_DIR/keystone/keystone.conf
+                sed -i "/MDCDATABASECONNECTION/ a\connection = mysql+pymysql://keystone:$SERVICE_PASSWORD@controller/keystone" $ETC_ROOT_DIR/keystone/keystone.conf
+		
+
+
 	elif [ $NODE = "compute" ]; then
 		sed -i "/^#MDC_NTP_SERVERIP/{n;d}" $ETC_ROOT_DIR/chrony/chrony.conf
                 sed -i "/MDC_NTP_SERVERIP/ a\server $SERVICE_HOST iburst" $ETC_ROOT_DIR/chrony/chrony.conf
@@ -43,7 +49,7 @@ replace_fn () {
 main () {
 	replace_fn
 	aeron_replace_retval="$?"
-        aeron_cmd_stat $aeron_replace_retval $machine
+        aeron_cmd_stat $aeron_replace_retval $machine replacefiles.sh
 
 	return 0
 }
