@@ -35,6 +35,7 @@ dbinit_fn() {
         aeron_dbinit_retval="$?"
         aeron_cmd_stat $aeron_dbinit_retval $machine dbinit_fn_glance
 
+
 }
 
 main () {

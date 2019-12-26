@@ -35,6 +35,18 @@ replace_fn () {
 		sed -i "/^#MDCDATABASECONNECTION/{n;d}" $ETC_ROOT_DIR/keystone/keystone.conf
                 sed -i "/MDCDATABASECONNECTION/ a\connection = mysql+pymysql://keystone:$SERVICE_PASSWORD@controller/keystone" $ETC_ROOT_DIR/keystone/keystone.conf
 		
+		###glancce
+		sed -i "/^#MDCDATABASECONNECTION/{n;d}" $ETC_ROOT_DIR/glance/glance-api.conf
+		sed -i "/MDCDATABASECONNECTION/ a\connection = mysql+pymysql://glance:$SERVICE_PASSWORD@controller/glance" $ETC_ROOT_DIR/glance/glance-api.conf
+
+		sed -i "/^#MDCGLANCEKESTONEAUTH/{n;d}" $ETC_ROOT_DIR/glance/glance-api.conf
+                sed -i "/MDCGLANCEKESTONEAUTH/ a\password = $SERVICE_PASSWORD" $ETC_ROOT_DIR/glance/glance-api.conf
+
+		sed -i "/^#MDCDATABASECONNECTION/{n;d}" $ETC_ROOT_DIR/glance/glance-registry.conf
+                sed -i "/MDCDATABASECONNECTION/ a\connection = mysql+pymysql://glance:$SERVICE_PASSWORD@controller/glance" $ETC_ROOT_DIR/glance/glance-registry.conf
+
+		sed -i "/^#MDCGLANCEKEYSTONEAUTH/{n;d}" $ETC_ROOT_DIR/glance/glance-registry.conf
+                sed -i "/MDCGLANCEKEYSTONEAUTH/ a\password = $SERVICE_PASSWORD" $ETC_ROOT_DIR/glance/glance-registry.conf
 
 
 	elif [ $NODE = "compute" ]; then

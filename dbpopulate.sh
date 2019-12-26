@@ -8,12 +8,23 @@ TOP_DIR=$(cd $(dirname "$0") && pwd)
 
 machine=$(check_machine )
 
+
+img_service_db_populate_fn () {
+
+	#populating the database
+        su -s /bin/sh -c "$1-manage db_sync" $1
+	aeron_imgservicedbpopulate_retval="$?"
+        aeron_cmd_stat $aeron_imgservicedbpopulate_retval $machine img_service_db_populate_fn
+	return $SUCCESS
+}
+
 db_populate_fn () {
 	case $NODE in
 		controller)
 				###KEYSTONE
 				#populating the database
-				su -s /bin/sh -c "keystone-manage db_sync" keystone
+				#su -s /bin/sh -c "keystone-manage db_sync" keystone
+				img_service_db_populate_fn keystone
 				aeron_dbpopulate_retval="$?"
 		                aeron_cmd_stat $aeron_dbpopulate_retval $machine dbpopulate_fn
 				
@@ -33,6 +44,11 @@ db_populate_fn () {
 				  --bootstrap-region-id RegionOne
 				aeron_dbpopulate_retval="$?"
                                 aeron_cmd_stat $aeron_dbpopulate_retval $machine dbpopulate_fn
+
+				img_service_db_populate_fn glance
+                                aeron_dbpopulate_retval="$?"
+                                aeron_cmd_stat $aeron_dbpopulate_retval $machine dbpopulate_fn
+
 
 				return $SUCCESS	
 				;;
