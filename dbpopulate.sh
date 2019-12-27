@@ -12,10 +12,14 @@ machine=$(check_machine )
 img_service_db_populate_fn () {
 
 	#populating the database
-        su -s /bin/sh -c "$1-manage $2" $1
+        managecmd='manage'
+	if [ $1 = 'neutron' ]; then
+		managecmd='db-manage'
+	fi
+	su -s /bin/sh -c "$1-$managecmd $2" $1
 	aeron_imgservicedbpopulate_retval="$?"
         aeron_cmd_stat $aeron_imgservicedbpopulate_retval $machine img_service_db_populate_fn
-	
+
 	return $SUCCESS
 }
 
@@ -77,6 +81,10 @@ db_populate_fn () {
                                 aeron_dbpopulate_retval="$?"
                                 aeron_cmd_stat $aeron_dbpopulate_retval $machine dbpopulate_fn_nova_list_cells
 
+				img_service_db_populate_fn neutron "--config-file /etc/neutron/neutron.conf \
+  --config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade head"
+                                aeron_dbpopulate_retval="$?"
+                                aeron_cmd_stat $aeron_dbpopulate_retval $machine dbpopulate_fn_neutron
 
 				return $SUCCESS	
 				;;

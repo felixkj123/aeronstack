@@ -79,8 +79,33 @@ replace_fn () {
 
 		sed -i "/^#MDCMETADATAPROXY/{n;d}" $ETC_ROOT_DIR/nova/nova.conf
                 sed -i "/MDCMETADATAPROXY/ a\metadata_proxy_shared_secret = $SERVICE_PASSWORD" $ETC_ROOT_DIR/nova/nova.conf
+		###neutron
+		sed -i "/^#MDCDATABASECONNECTION/{n;d}" $ETC_ROOT_DIR/neutron/neutron.conf
+                sed -i "/MDCDATABASECONNECTION/ a\connection = mysql+pymysql://neutron:$SERVICE_PASSWORD@controller/neutron" $ETC_ROOT_DIR/neutron/neutron.conf
+		
+		sed -i "/^#MDCNEUTRONTRANSPORT/{n;d}" $ETC_ROOT_DIR/neutron/neutron.conf
+                sed -i "/MDCNEUTRONTRANSPORT/ a\transport_url = rabbit://openstack:$SERVICE_PASSWORD@controller" $ETC_ROOT_DIR/neutron/neutron.conf
 
+		sed -i "/^#MDCNEUTRONKEYSTONEAUTH/{n;d}" $ETC_ROOT_DIR/neutron/neutron.conf
+                sed -i "/MDCNEUTRONKEYSTONEAUTH/ a\password = $SERVICE_PASSWORD" $ETC_ROOT_DIR/neutron/neutron.conf
+		
+		sed -i "/^#MDCNOVAKEYSTONEAUTH/{n;d}" $ETC_ROOT_DIR/neutron/neutron.conf
+                sed -i "/MDCNOVAKEYSTONEAUTH/ a\password = $SERVICE_PASSWORD" $ETC_ROOT_DIR/neutron/neutron.conf
+		
+		sed -i "/^#MDCPROVIDER_INTERFACE_NAME/{n;d}" $ETC_ROOT_DIR/neutron/plugins/ml2/linuxbridge_agent.ini
+                sed -i "/MDCPROVIDER_INTERFACE_NAME/ a\physical_interface_mappings = provider:$PROVIDER_INTERFACE_NAME" $ETC_ROOT_DIR/neutron/plugins/ml2/linuxbridge_agent.ini
+		
+		sed -i "/^#MDCOVERLAY_INTERFACE_IP_ADDRESS/{n;d}" $ETC_ROOT_DIR/neutron/plugins/ml2/linuxbridge_agent.ini
+                sed -i "/MDCOVERLAY_INTERFACE_IP_ADDRESS/ a\local_ip = $OVERLAY_INTERFACE_IP_ADDRESS" $ETC_ROOT_DIR/neutron/plugins/ml2/linuxbridge_agent.ini
 
+		sed -i "/^#MDCMETADATAPROXYPASSWD/{n;d}" $ETC_ROOT_DIR/neutron/metadata_agent.ini
+                sed -i "/MDCOVERLAY_INTERFACE_IP_ADDRESS/ a\metadata_proxy_shared_secret = $ADMIN_PASSWORD" $ETC_ROOT_DIR/neutron/metadata_agent.ini
+
+		###novacompute
+		if [ $1 = "allinone"  ]; then
+			sed -i "/^#MDCNOVNCPROXYURL/{n;d}" $ETC_ROOT_DIR/nova/nova.conf
+                	sed -i "/MDCNOVNCPROXYURL/ a\novncproxy_base_url = http://controller:6080/vnc_auto.html" $ETC_ROOT_DIR/nova/nova.conf
+		fi
 
 	elif [ $NODE = "compute" ]; then
 		sed -i "/^#MDC_NTP_SERVERIP/{n;d}" $ETC_ROOT_DIR/chrony/chrony.conf
@@ -92,7 +117,7 @@ replace_fn () {
 }
 
 main () {
-	replace_fn
+	replace_fn $2
 	aeron_replace_retval="$?"
         aeron_cmd_stat $aeron_replace_retval $machine replacefiles.sh
 

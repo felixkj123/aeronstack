@@ -80,16 +80,16 @@ main () {
 		aeron_install_retval="$?"
         	aeron_cmd_stat $aeron_install_retval $machine arstack_main_install
 		
-		$BASH_DIR $TOP_DIR/movfiles.sh
+		$BASH_DIR $TOP_DIR/movfiles.sh $@
 		aeron_install_retval="$?"
         	aeron_cmd_stat $aeron_install_retval $machine arstack_main_movfiles
 
-		$BASH_DIR $TOP_DIR/replacefiles.sh
+		$BASH_DIR $TOP_DIR/replacefiles.sh $@
 		aeron_install_retval="$?"
         	aeron_cmd_stat $aeron_install_retval $machine arstack_main_replace
 
 
-		$BASH_DIR $TOP_DIR/dbinit.sh
+		$BASH_DIR $TOP_DIR/dbinit.sh $@
 		aeron_install_retval="$?"
 		aeron_cmd_stat $aeron_install_retval $machine arstack_main_dbinit
 
@@ -97,15 +97,15 @@ main () {
 		###have to create a openstackinit.sh script
 		
 		
-		$BASH_DIR $TOP_DIR/dbpopulate.sh
+		$BASH_DIR $TOP_DIR/dbpopulate.sh $@
                 aeron_install_retval="$?"
                 aeron_cmd_stat $aeron_install_retval $machine arstack_main_dbpopulate
 		
-		$BASH_DIR $TOP_DIR/services.sh start_all
+		$BASH_DIR $TOP_DIR/services.sh $@
 		aeron_install_retval="$?"
         	aeron_cmd_stat $aeron_install_retval $machine arstack_main_services
 
-		$BASH_DIR $TOP_DIR/arstack_init.sh
+		$BASH_DIR $TOP_DIR/arstack_init.sh $@
 		aeron_install_retval="$?"
                 aeron_cmd_stat $aeron_install_retval $machine arstack_main_arstack_init
 

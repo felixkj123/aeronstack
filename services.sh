@@ -49,6 +49,32 @@ services_enable_fn() {
 	systemctl enable nova-novncproxy
         aeron_service_enable_retval="$?"
         aeron_cmd_stat $aeron_service_enable_retval $machine services_enable_fn_nova-novncproxy
+
+	systemctl enable neutron-server
+        aeron_service_enable_retval="$?"
+        aeron_cmd_stat $aeron_service_enable_retval $machine services_enable_fn_neutron-server
+
+	systemctl enable neutron-linuxbridge-agent
+        aeron_service_enable_retval="$?"
+        aeron_cmd_stat $aeron_service_enable_retval $machine services_enable_fn_neutron-linuxbridge-agent
+
+	systemctl enable neutron-dhcp-agent
+        aeron_service_enable_retval="$?"
+        aeron_cmd_stat $aeron_service_enable_retval $machine services_enable_fn_neutron-dhcp-agent
+
+	systemctl enable neutron-metadata-agent
+        aeron_service_enable_retval="$?"
+        aeron_cmd_stat $aeron_service_enable_retval $machine services_enable_fn_neutron-metadata-agent
+
+	systemctl enable neutron-l3-agent
+        aeron_service_enable_retval="$?"
+        aeron_cmd_stat $aeron_service_enable_retval $machine services_enable_fn_neutron-l3-agent
+
+	if [ $1 = "allinone"  ];then
+		systemctl enable nova-compute
+        	aeron_service_enable_retval="$?"
+        	aeron_cmd_stat $aeron_service_enable_retval $machine services_enable_fn_nova-compute
+        fi
 }
 
 services_restart_fn () {
@@ -93,7 +119,31 @@ services_restart_fn () {
         aeron_service_enable_retval="$?"
         aeron_cmd_stat $aeron_service_restart_retval $machine services_restart_fn_nova-novncproxy
 
+	systemctl restart neutron-server
+        aeron_service_enable_retval="$?"
+        aeron_cmd_stat $aeron_service_restart_retval $machine services_restart_fn_neutron-server
 
+	systemctl restart neutron-linuxbridge-agent
+        aeron_service_enable_retval="$?"
+        aeron_cmd_stat $aeron_service_restart_retval $machine services_restart_fn_neutron-linuxbridge-agent
+
+	systemctl restart neutron-dhcp-agent restart
+        aeron_service_enable_retval="$?"
+        aeron_cmd_stat $aeron_service_restart_retval $machine services_restart_fn_neutron-dhcp-agent restart
+
+	systemctl restart neutron-metadata-agent
+        aeron_service_enable_retval="$?"
+        aeron_cmd_stat $aeron_service_restart_retval $machine services_restart_fn_neutron-metadata-agent
+
+	systemctl restart neutron-l3-agent
+        aeron_service_enable_retval="$?"
+        aeron_cmd_stat $aeron_service_restart_retval $machine services_restart_fn_neutron-l3-agent
+
+	if [ $1 = "allinone"  ];then
+		systemctl restart nova-compute
+        	aeron_service_enable_retval="$?"
+        	aeron_cmd_stat $aeron_service_restart_retval $machine services_restart_fn_nova-compute
+	fi
 }
 
 services_stop_fn () {
@@ -102,13 +152,13 @@ services_stop_fn () {
 main () {
 	echo "service machine is $machine"
 	echo "service arg is $1"
-	if [ $1 = 'start_all'  ];then
+	if [ $1 = 'all'  ];then
 		#echo "service machine is $machine"
-		services_enable_fn
+		services_enable_fn $2
 		aeron_service_retval="$?"
                 aeron_cmd_stat $aeron_service_retval $machine services_main
 
-		services_restart_fn
+		services_restart_fn $2
 		aeron_service_retval="$?"
                 aeron_cmd_stat $aeron_service_retval $machine services_main
 	fi

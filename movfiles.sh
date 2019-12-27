@@ -65,6 +65,35 @@ copy_fn () {
         aeron_copy_retval="$?"
         aeron_cmd_stat $aeron_copy_retval $machine copy_glance-registry
 
+	###neutron
+	sudo cp $ETC_DIR/neutron.conf $ETC_ROOT_DIR/neutron/
+        aeron_copy_retval="$?"
+        aeron_cmd_stat $aeron_copy_retval $machine copy_neutron_conf
+
+	sudo cp $ETC_DIR/ml2_conf.ini $ETC_ROOT_DIR/neutron/plugins/ml2/
+        aeron_copy_retval="$?"
+        aeron_cmd_stat $aeron_copy_retval $machine copy_glance-registry
+
+	sudo cp $ETC_DIR/linuxbridge_agent.ini $ETC_ROOT_DIR/neutron/plugins/ml2/
+        aeron_copy_retval="$?"
+        aeron_cmd_stat $aeron_copy_retval $machine copy_glance-registry
+
+	sudo cp $ETC_DIR/l3_agent.ini $ETC_ROOT_DIR/neutron/
+        aeron_copy_retval="$?"
+        aeron_cmd_stat $aeron_copy_retval $machine copy_glance-registry
+
+	sudo cp $ETC_DIR/dhcp_agent.ini $ETC_ROOT_DIR/neutron/
+        aeron_copy_retval="$?"
+        aeron_cmd_stat $aeron_copy_retval $machine copy_glance-registry
+
+	sudo cp $ETC_DIR/local_settings.py $ETC_ROOT_DIR/openstack-dashboard/
+        aeron_copy_retval="$?"
+        aeron_cmd_stat $aeron_copy_retval $machine copy_openstack-dashboard_localsettings
+
+	sudo cp $ETC_DIR/openstack-dashboard.conf $ETC_ROOT_DIR/apache2/conf-available/
+        aeron_copy_retval="$?"
+        aeron_cmd_stat $aeron_copy_retval $machine copy_openstack-dashboardconf
+	
 }
 
 main() {

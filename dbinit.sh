@@ -50,6 +50,11 @@ dbinit_fn() {
 	db_create_fn nova_cell0 nova
         aeron_dbinit_retval="$?"
         aeron_cmd_stat $aeron_dbinit_retval $machine dbinit_fn_nova_cell0
+
+	db_create_fn neutron neutron
+        aeron_dbinit_retval="$?"
+        aeron_cmd_stat $aeron_dbinit_retval $machine dbinit_fn_nova_cell0
+
 }
 
 main () {
