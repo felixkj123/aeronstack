@@ -41,6 +41,13 @@ install_fn () {
 	        aeron_install_retval="$?"
 	        aeron_cmd_stat $aeron_install_retval $machine install_fn_chrony
 		
+		if [ "$machine" == "Ubuntu" ];then
+	            sudo apt-get install software-properties-common -y
+        	    sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8
+            	sudo cp $TOP_DIR/etc/mariadb.list /etc/apt/sources.list.d/mariadb.list -v
+            	sudo apt update -y
+        	fi
+
 		$PKG_TOOL install mariadb-server python-pymysql -y
                 aeron_install_retval="$?"
                 aeron_cmd_stat $aeron_install_retval $machine install_fn_mariadb
